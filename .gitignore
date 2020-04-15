@@ -1,2 +1,5 @@
+.gitignore
 node_modules
-jsondata/*.json
+jsonData/*.json
+*.json
+warnings.json
