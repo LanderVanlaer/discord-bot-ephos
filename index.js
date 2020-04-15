@@ -48,7 +48,7 @@ fs.readdir("./messageReactionAdd/", (err, files) => {
 
 //--------------------------------------------------------------------------------------------------------------------------
 bot.on("ready", async () => {
-  console.log(`${bot.user.username} is online on ${bot.guilds.size} servers!`);
+  console.log(`${bot.user.username} is online on ${bot.guilds.cache.size} servers!`);
   bot.user.setActivity(BOT_CONFIG.activityText, {
     type: BOT_CONFIG.activityType
   });
@@ -67,7 +67,7 @@ bot.on("message", async message => {
       message.reply(`You're not allowed to invite people for other servers!!!`).then(msg => msg.delete(10000)).catch(console.error);
       message.guild.channels.find(x => x.name == BOT_CONFIG.channels.logbook || x.id == BOT_CONFIG.channels.logbook)
         .send({
-          embed: new Discord.RichEmbed()
+          embed: new Discord.MessageEmbed()
             .setTitle("Send Discord Invite")
             .addField("By", `${message.author} With Id: ${message.author.id}`)
             .addField("Channel", message.channel)
@@ -148,7 +148,7 @@ bot.on('messageReactionAdd', (reaction, user) => {
 
 
 bot.on('guildBanAdd', (guild, user) => {
-  let embed = new Discord.RichEmbed()
+  let embed = new Discord.MessageEmbed()
     .setTitle("BAN")
     .setColor("#F04747")
     .addField("Name", user.tag)
