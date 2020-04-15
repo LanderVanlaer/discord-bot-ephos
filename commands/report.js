@@ -6,7 +6,7 @@ module.exports.run = async (bot, message, args) => {
   let reason = args.join(" ").slice(22);
   if (!reason) return message.reply("Please give reason, !report @name <reason>");
 
-  let reportEmbed = new Discord.RichEmbed()
+  let reportEmbed = new Discord.MessageEmbed()
     .setDescription("REPORT")
     .setColor("#15f153")
     .addField("Reported User", `${rUser} With Id: ${rUser.id}`)
@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) => {
     .addField("Channel", message.channel)
     .addField("When", message.createdAt)
     .addField("Reason", reason);
-  let reportEmbedPrivate = new Discord.RichEmbed()
+  let reportEmbedPrivate = new Discord.MessageEmbed()
     .setDescription("REPORT")
     .setColor("#15f153")
     .addField("Reported User ", `${rUser} With Id: ${rUser.id}`)
