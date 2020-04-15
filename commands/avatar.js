@@ -11,7 +11,7 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
     name: "avatar",
-    description: "give your avatar (profile photo)",
+    description: "gives an avatar (profile photo)",
     administrator: false,
-    usage: "avatar"
+    usage: "avatar @userNN"
 }

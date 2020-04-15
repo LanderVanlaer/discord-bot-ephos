@@ -7,7 +7,7 @@ let warns = JSON.parse(fs.readFileSync("./jsonData/warnings.json", "utf8"));
 module.exports.run = async (bot, message, args) => {
   //!warn @daeshan <reason>
   if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command, if you want to report someone use ${pr}report`);
-  let wUser = message.guild.member(message.mentions.users.first()) || message.guild.members.get(args[0])
+  let wUser = message.guild.member(message.mentions.users.first()) || message.guild.members.get(args[0]);
   if (!wUser) return message.reply(`User not found, use: ${pr}warn @name <reason>`);
   if (wUser.hasPermission("ADMINISTRATOR")) return message.reply("You can't warn him, he's an administrator.");
   let reason = args.join(" ").slice(22);
@@ -83,7 +83,7 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
   name: "warn",
-  description: "warn someone !warn @name reason",
+  description: "warn someone",
   administrator: true,
   usage: "warn @user <reason>"
 }

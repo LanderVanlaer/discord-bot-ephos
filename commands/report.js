@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const botconfig = require("../jsonData/botconfig.json");
+
 module.exports.run = async (bot, message, args) => {
   let rUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
   if (!rUser) return message.reply("I didn't find that user, !report @name <reason>");
@@ -35,7 +36,7 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
   name: "report",
-  description: "report someone: !report @name <reason>",
+  description: "report someone",
   administrator: false,
   usage: "report @name <reason>"
 }

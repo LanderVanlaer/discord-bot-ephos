@@ -15,7 +15,7 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
   name: "warnlevel",
-  description: "give the amount of warns of someone !warnlevel @name",
+  description: "give the amount of warns of someone",
   administrator: false,
   usage: "warnlevel @name"
 }

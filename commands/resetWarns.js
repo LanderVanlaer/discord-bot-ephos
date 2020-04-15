@@ -36,7 +36,7 @@ module.exports.run = async (bot, message, args) => {
 
 module.exports.help = {
     name: "resetwarn",
-    description: "Remove the amount of warns of someone !resetwarn @name",
+    description: "Remove the amount of warns of someone",
     administrator: true,
     usage: "resetwarn @user"
 }
