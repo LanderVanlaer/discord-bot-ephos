@@ -86,44 +86,70 @@ bot.on("message", async message => {
   if (commandfile) commandfile.run(bot, message, args);
 });
 
-bot.on('guildMemberAdd', async member => {
+bot.on('guildMemberAdd', member => {
   // var role = member.guild.roles.find('name', BOT_CONFIG.roles.basic);
   // member.addRole(role);
-  let welcomeEmbed = {
-    content: '\u200B',
-    color: COLORS.DARK_BLUE,
-    thumbnail: {
-      url: member.guild.iconURL
-    },
-    title: member.guild.name,
-    description: `[Click here to check our site!](${BOT_CONFIG.website})`,
-    fields: [{
-        name: 'About',
-        inline: false,
-        value: `Welcome on the **${member.guild.name}** server\nThere are now ${member.guild.members.filter(member => !member.user.bot).size} players in total on the server.\nTalk, chat and game!`
-      },
-      {
-        name: '\u200B',
-        inline: false,
-        value: '\u200B'
-      }, {
-        name: '\u200B',
-        inline: false,
-        value: await fs.readFile("jsonData/welcomeMessage.txt")
+  fs.readFile("jsonData/welcomeMessage.txt", (err, data) => {
+    if (err) return console.log(err);
+    // let welcomeEmbed = {
+    //   content: '\u200B',
+    //   color: COLORS.DARK_BLUE,
+    //   thumbnail: {
+    //     url: member.guild.iconURL
+    //   },
+    //   title: member.guild.name,
+    //   description: `[Click here to check our site!](${BOT_CONFIG.website})`,
+    //   fields: [{
+    //       name: 'About',
+    //       inline: false,
+    //       value: `Welcome on the **${member.guild.name}** server\nThere are now ${member.guild.members.cache.filter(member => !member.user.bot.size)} players in total on the server.\nTalk, chat and game!`
+    //     },
+    //     {
+    //       name: '\u200B',
+    //       inline: false,
+    //       value: '\u200B'
+    //     }, {
+    //       name: '\u200B',
+    //       inline: false,
+    //       value: data
+    //     }
+    //   ],
+    //   footer: {
+    //     text: '*React with* :ballot_box_with_check: *or type !verify to unlock the server.*'
+    //   },
+    //   image: {
+    //     url: "https://lh3.googleusercontent.com/HdXLBC4CwPoe0CB_qULCsO3sUkLAxJloow4tRwQPi1x0vUs_ox92NPSa8bgo4UhVE5zOpzndeTevLw=w1920-h969-rw"
+    //   }
+    // }
+    member.send({
+      embed: {
+        content: '\u200B',
+        color: COLORS.DARK_BLUE,
+        thumbnail: {
+          url: member.guild.iconURL
+        },
+        title: member.guild.name,
+        description: `[Click here to check our site!](${BOT_CONFIG.website})`,
+        fields: [{
+          name: 'About',
+          inline: false,
+          value: `Welcome on the **${member.guild.name}** server\nThere are now ${member.guild.members.cache.filter(member => !member.user.bot).size} players in total on the server.\nTalk, chat and game!`
+        }, {
+          name: '\u200B',
+          inline: false,
+          value: data
+        }],
+        footer: {
+          text: 'Type !verify in welcome to unlock the server.'
+        },
+        image: {
+          url: "https://drive.google.com/uc?export=view&id=12m28D15qPw9A2vFTcT3cFd0gIUaLrjVh"
+        }
       }
-    ],
-    footer: {
-      text: '*React with* :ballot_box_with_check: *or type !verify to unlock the server.*'
-    },
-    image: {
-      url: "https://lh3.googleusercontent.com/HdXLBC4CwPoe0CB_qULCsO3sUkLAxJloow4tRwQPi1x0vUs_ox92NPSa8bgo4UhVE5zOpzndeTevLw=w1920-h969-rw"
-    }
-  }
-  member.send({
-    embed: welcomeEmbed
-  }).catch(err => {
-    console.log(err)
-  });
+    }).catch(err => {
+      console.log(err)
+    });
+  })
 })
 
 bot.on('messageReactionAdd', (reaction, user) => {
