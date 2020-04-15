@@ -55,7 +55,7 @@ bot.on("ready", async () => {
 });
 
 
-bot.on("message", async message => {
+bot.on("message", message => {
   if (message.channel.type === "dm") return;
   if (message.author.bot) return;
 
@@ -63,26 +63,31 @@ bot.on("message", async message => {
   if (!message.member.hasPermission("ADMINISTRATOR")) {
     const linkRegex = /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/.+[a-z]/i;
     if (linkRegex.test(message.content)) {
-      await message.delete().catch(O_o => {});
-      message.reply(`You're not allowed to invite people for other servers!!!`).then(msg => msg.delete(10000)).catch(console.error);
-      message.guild.channels.find(x => x.name == BOT_CONFIG.channels.logbook || x.id == BOT_CONFIG.channels.logbook)
-        .send({
-          embed: new Discord.MessageEmbed()
-            .setTitle("Send Discord Invite")
-            .addField("By", `${message.author} With Id: ${message.author.id}`)
-            .addField("Channel", message.channel)
-            .addField("Created At", message.createdAt)
-            .addField("Content", message.content)
-            .setColor("#7289DA")
-        });
-      return
+      message.guild.fetchInvites().then(invites => {
+        if (!invites.some(x => message.content.includes(x.code))) {
+          message.delete().catch(console.error);
+          message.reply(`You're not allowed to invite people for other servers!!!`).then(msg => msg.delete({
+            timeout: 10000
+          })).catch(console.error);
+          message.guild.channels.cache.find(x => x.name == BOT_CONFIG.channels.logbook || x.id == BOT_CONFIG.channels.logbook)
+            .send(new Discord.MessageEmbed()
+              .setTitle("Send Discord Invite")
+              .addField("By", `${message.author} With Id: ${message.author.id}`)
+              .addField("Channel", message.channel)
+              .addField("Created At", message.createdAt)
+              .addField("Content", message.content)
+              .setColor("#7289DA")
+            );
+        }
+      })
     }
   }
 
-  let messageArray = message.content.split(" ");
-  let cmd = messageArray[0];
-  const args = messageArray.slice(1);
-  let commandfile = bot.commands.get(cmd.slice(BOT_CONFIG.prefix.length));
+  const
+    messageArray = message.content.split(" "),
+    cmd = messageArray[0],
+    args = messageArray.slice(1),
+    commandfile = bot.commands.get(cmd.slice(BOT_CONFIG.prefix.length));
   if (commandfile) commandfile.run(bot, message, args);
 });
 
@@ -110,20 +115,53 @@ bot.on('messageReactionAdd', (reaction, user) => {
 
 
 bot.on('guildBanAdd', (guild, user) => {
-  let embed = new Discord.MessageEmbed()
-    .setTitle("BAN")
-    .setColor("#F04747")
-    .addField("Name", user.tag)
-    .addField("Id", user.id)
-    .setThumbnail(user.avatarURL);
-
-  guild.channels.find(x => x.name == BOT_CONFIG.channels.banKick || x.id == BOT_CONFIG.channels.banKick).send({
-    embed: embed
+  guild.channels.cache.find(x => x.name == BOT_CONFIG.channels.banKick || x.id == BOT_CONFIG.channels.banKick).send({
+    embed: new Discord.MessageEmbed()
+      .setTitle("BAN")
+      .setColor("#F04747")
+      .addField("Name", user.tag)
+      .addField("Id", user.id)
+      .setThumbnail(user.displayAvatarURL())
   });
-
+})
+bot.on('guildBanRemove', (guild, user) => {
+  guild.channels.cache.find(x => x.name == BOT_CONFIG.channels.banKick || x.id == BOT_CONFIG.channels.banKick).send({
+    embed: new Discord.MessageEmbed()
+      .setTitle("UNBAN")
+      .setColor("#10A33A")
+      .addField("Name", user.tag)
+      .addField("Id", user.id)
+      .setThumbnail(user.displayAvatarURL())
+  });
 })
 
+bot.on('messageDelete', message => {
+  message.guild.channels.cache.find(x => x.name == BOT_CONFIG.channels.logbook || x.id == BOT_CONFIG.channels.logbook).send({
+    embed: new Discord.MessageEmbed()
+      .setTitle("MESSAGE DELETE")
+      .setColor("#2196F3")
+      .addField("Name", message.author.tag)
+      .addField("Tag", `<@${message.author.id}>`)
+      .addField("Id", message.author.id)
+      .addField("Deleted Message", message.content)
+      .setThumbnail(message.author.displayAvatarURL())
+  }).catch(console.error);
+})
 
+bot.on('messageUpdate', (oldMessage, newMessage) => {
+  if (!newMessage.content) return;
+  newMessage.guild.channels.cache.find(x => x.name == BOT_CONFIG.channels.logbook || x.id == BOT_CONFIG.channels.logbook).send({
+    embed: new Discord.MessageEmbed()
+      .setTitle("MESSAGE EDIT")
+      .setColor("#2196F3")
+      .addField("Name", newMessage.author.tag)
+      .addField("Tag", `<@${newMessage.author.id}>`)
+      .addField("Id", newMessage.author.id)
+      .addField("From Message Content", `${oldMessage.content} `)
+      .addField("To Message Content", `${newMessage.content} `)
+      .setThumbnail(newMessage.author.displayAvatarURL())
+  }).catch(console.error);
+})
 
 
 //if message isn't in cachge, 'place it in cache'.
