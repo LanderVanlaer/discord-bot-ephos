@@ -1,5 +1,5 @@
-const botconfig = require("./jsonData/botconfig.json");
-const colors = require("./jsonData/colors.json");
+const BOT_CONFIG = require("./jsonData/botconfig.json");
+const COLORS = require("./jsonData/colors.json");
 const fs = require("fs");
 const Discord = require("discord.js");
 const bot = new Discord.Client({
@@ -11,14 +11,14 @@ bot.reactionsAdd = new Discord.Collection();
 fs.readdir("./commands/", (err, files) => {
   if (err) return console.log(err);
 
-  let jsfile = files.filter(f => f.split(".").pop() === "js");
+  let jsfiles = files.filter(f => f.split(".").pop() === "js");
 
-  if (jsfile.length <= 0) {
+  if (jsfiles.length <= 0) {
     console.log("Couldn't find commands.");
     return;
   }
   console.log(`\n------COMMANDS------`);
-  jsfile.forEach((f, i) => {
+  jsfiles.forEach((f, i) => {
     let props = require(`./commands/${f}`);
     console.log(`${i}.  ${f}`);
     bot.commands.set(props.help.name, props);
@@ -49,21 +49,23 @@ fs.readdir("./messageReactionAdd/", (err, files) => {
 //--------------------------------------------------------------------------------------------------------------------------
 bot.on("ready", async () => {
   console.log(`${bot.user.username} is online on ${bot.guilds.size} servers!`);
-  bot.user.setActivity(botconfig.activityText, {
-    type: botconfig.activityType
+  bot.user.setActivity(BOT_CONFIG.activityText, {
+    type: BOT_CONFIG.activityType
   });
 });
+
+
 bot.on("message", async message => {
   if (message.channel.type === "dm") return;
   if (message.author.bot) return;
 
 
   if (!message.member.hasPermission("ADMINISTRATOR")) {
-    const linkRegex = /d?.{0,4}i?.{0,4}s.{0,4}c.{0,4}o.{0,4}r.{0,4}d?.{0,4}\..{0,4}g.{0,4}g.{0,4}\/|d?.{0,4}i?.{0,4}s.{0,4}c.{0,4}o.{0,4}r.{0,4}d?.{0,4}a.{0,4}p?.{0,4}p?.{0,4}\..{0,4}c.{0,4}o.{0,4}m.{0,4}\/.{0,4}i.{0,4}n.{0,4}v.{0,4}i.{0,4}t.{0,4}e.{0,4}\//i;
+    const linkRegex = /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/.+[a-z]/i;
     if (linkRegex.test(message.content)) {
       await message.delete().catch(O_o => {});
       message.reply(`You're not allowed to invite people for other servers!!!`).then(msg => msg.delete(10000)).catch(console.error);
-      message.guild.channels.find(x => x.name == botconfig.channels.logbook || x.id == botconfig.channels.logbook)
+      message.guild.channels.find(x => x.name == BOT_CONFIG.channels.logbook || x.id == BOT_CONFIG.channels.logbook)
         .send({
           embed: new Discord.RichEmbed()
             .setTitle("Send Discord Invite")
@@ -77,25 +79,24 @@ bot.on("message", async message => {
     }
   }
 
-  const prefix = botconfig.prefix;
   let messageArray = message.content.split(" ");
   let cmd = messageArray[0];
   const args = messageArray.slice(1);
-  let commandfile = bot.commands.get(cmd.slice(prefix.length));
+  let commandfile = bot.commands.get(cmd.slice(BOT_CONFIG.prefix.length));
   if (commandfile) commandfile.run(bot, message, args);
 });
 
-bot.on('guildMemberAdd', member => {
-  // var role = member.guild.roles.find('name', botconfig.roles.basic);
+bot.on('guildMemberAdd', async member => {
+  // var role = member.guild.roles.find('name', BOT_CONFIG.roles.basic);
   // member.addRole(role);
   let welcomeEmbed = {
     content: '\u200B',
-    color: colors.DARK_BLUE,
+    color: COLORS.DARK_BLUE,
     thumbnail: {
       url: member.guild.iconURL
     },
     title: member.guild.name,
-    description: `[Click here to check our site!](${botconfig.website})`,
+    description: `[Click here to check our site!](${BOT_CONFIG.website})`,
     fields: [{
         name: 'About',
         inline: false,
@@ -108,34 +109,14 @@ bot.on('guildMemberAdd', member => {
       }, {
         name: '\u200B',
         inline: false,
-        value: `
-          _**BEFORE YOU CONTINUE, PLEASE READ THE RULES TO AVOID POSSIBLE CONFLICTS**_
-
-          :warning: *Any questions or concerns regarding the rules can be discussed with a staff member.*
-
-          ━━━━━━━━━━━━━━━━━━━━
-
-          **1) MUTUAL RESPECT is valued.**
-
-          **2) Only ADVERTISE with a MANAGERS CONSENT.**
-
-          **3) NO discussing or encouraging possibly OFFENSIVE, ILLEGAL or VIOLATING CONTENT AND BEHAVIOR.**
-          **Everything harming the Discord ToS falls into this category as well.**
-
-          **4) The IMPERSONATION of _any__ member will NOT be condoned.**
-
-          **5) ADMINISTRATIONAL ACTIONS are FINAL and should only done by staff members. (no minimodding)**
-
-          **6) NO BAN and PUNISHMENT EVASIONS.**
-
-          ━━━━━━━━━━━━━━━━━━━━`
+        value: await fs.readFile("jsonData/welcomeMessage.txt")
       }
     ],
     footer: {
-      text: '*Once you have read the rules type !verify to unlock the server.*'
+      text: '*React with* :ballot_box_with_check: *or type !verify to unlock the server.*'
     },
     image: {
-      url: "https://cdn.discordapp.com/attachments/657206419459670026/660113462017523781/image0.jpg"
+      url: "https://lh3.googleusercontent.com/HdXLBC4CwPoe0CB_qULCsO3sUkLAxJloow4tRwQPi1x0vUs_ox92NPSa8bgo4UhVE5zOpzndeTevLw=w1920-h969-rw"
     }
   }
   member.send({
@@ -150,8 +131,8 @@ bot.on('messageReactionAdd', (reaction, user) => {
 
   if (reaction.message.author.bot) return;
   if (reaction.message.channel.type === "dm") return;
-  for (const a in botconfig.messageReactionAdd) {
-    if (botconfig.messageReactionAdd[a].messageId == reaction.message.id) {
+  for (const a in BOT_CONFIG.messageReactionAdd) {
+    if (BOT_CONFIG.messageReactionAdd[a].messageId == reaction.message.id) {
       return bot.reactionsAdd.get(a).run(bot, reaction, user);
     }
   }
@@ -174,7 +155,7 @@ bot.on('guildBanAdd', (guild, user) => {
     .addField("Id", user.id)
     .setThumbnail(user.avatarURL);
 
-  guild.channels.find(x => x.name == botconfig.channels.banKick || x.id == botconfig.channels.banKick).send({
+  guild.channels.find(x => x.name == BOT_CONFIG.channels.banKick || x.id == BOT_CONFIG.channels.banKick).send({
     embed: embed
   });
 
@@ -211,7 +192,7 @@ bot.on('raw', packet => {
 
 
 
-bot.login(botconfig.token);
+bot.login(BOT_CONFIG.token);
 
 
 //___________________________________________________________________________________________________________________________________________________________________________________________________________________

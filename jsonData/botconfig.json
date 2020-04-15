@@ -5,8 +5,8 @@
     "basic": "534005653807824916"
   },
   "website": "https://google.com",
-  "activityText": "your commands.",
   "activityType": "LISTENING",
+  "activityText": "your commands.",
   "ACTIVITY_OPTIONS": ["PLAYING", "STREAMING", "LISTENING", "WATCHING"],
   "channels": {
     "report": "reports",
