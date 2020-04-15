@@ -9,7 +9,7 @@ module.exports.run = async (bot, message, args) => {
     .setThumbnail(bicon)
     .addField("Bot Name", bot.user.username)
     .addField("Created On", bot.user.createdAt)
-    .addField("Created By", "@Lander Van laer#7819")
+    .addField("Created By", "<@295203224271454208>")
     .addField("Prefix", botconfig.prefix);
   message.channel.send(botembed);
 }
