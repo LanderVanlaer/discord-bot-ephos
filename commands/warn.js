@@ -1,17 +1,17 @@
 const Discord = require("discord.js");
 const botconfig = require("../jsonData/botconfig.json");
-const pr = botconfig.prefix;
+const PR = botconfig.prefix;
 const fs = require("fs");
 const ms = require("ms");
 let warns = JSON.parse(fs.readFileSync("./jsonData/warnings.json", "utf8"));
 module.exports.run = async (bot, message, args) => {
   //!warn @daeshan <reason>
-  if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command, if you want to report someone use ${pr}report`);
+  if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command, if you want to report someone use ${PR}report`);
   let wUser = message.guild.member(message.mentions.users.first()) || message.guild.members.get(args[0]);
-  if (!wUser) return message.reply(`User not found, use: ${pr}warn @name <reason>`);
+  if (!wUser) return message.reply(`User not found, use: ${PR}warn @name <reason>`);
   if (wUser.hasPermission("ADMINISTRATOR")) return message.reply("You can't warn him, he's an administrator.");
   let reason = args.join(" ").slice(22);
-  if (!reason) return message.reply(`Please add a reason, ${pr}warn @name <reason>`)
+  if (!reason) return message.reply(`Please add a reason, ${PR}warn @name <reason>`)
 
   //Delete extra friend rank
   // let Friend = message.guild.roles.find(`name`, "friend");
@@ -20,9 +20,10 @@ module.exports.run = async (bot, message, args) => {
   //   hasRankFriend = true;
   // }
 
-  if (!warns[wUser.id]) warns[wUser.id] = {
-    warns: 0
-  };
+  if (!warns[wUser.id])
+    warns[wUser.id] = {
+      warns: 0
+    };
 
   if (warns[wUser.id].warns > botconfig.maxWarns) {
     warns[wUser.id].warns = 0;
