@@ -1,0 +1,26 @@
+{
+  "token": "NjU4Mjg5NzA3Njk1ODY1ODc2.Xf9p7w.BtKNhn6GRxQZ5c7Zc4ZwbQVpeG0",
+  "prefix": "!",
+  "roles": {
+    "basic": "534005653807824916"
+  },
+  "website": "https://google.com",
+  "activityText": "your commands.",
+  "activityType": "LISTENING",
+  "ACTIVITY_OPTIONS": ["PLAYING", "STREAMING", "LISTENING", "WATCHING"],
+  "channels": {
+    "report": "reports",
+    "warn": "warnings",
+    "banKick": "ban-kick",
+    "logbook": "logboek"
+  },
+  "warnMuteTime": ["30s"],
+  "maxWarns": 5,
+  "messageReactionAdd": {
+    "rulesVerification": {
+      "messageId": "660162755562700830",
+      "role": "basic"
+    }
+  },
+  "notAllowedWords": [""]
+}
