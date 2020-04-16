@@ -85,7 +85,7 @@ bot.on("message", message => {
 
   const
     messageArray = message.content.split(" "),
-    cmd = messageArray[0],
+    cmd = messageArray[0].toLowerCase(),
     args = messageArray.slice(1),
     commandfile = bot.commands.get(cmd.slice(BOT_CONFIG.prefix.length));
   if (commandfile) commandfile.run(bot, message, args);
