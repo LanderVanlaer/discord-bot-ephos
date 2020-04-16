@@ -1,5 +1,4 @@
-// const BOT_CONFIG = require("./jsonData/botconfig.json");
-import * as BOT_CONFIG from "./jsonData/botconfig.json";
+const BOT_CONFIG = require("./jsonData/botconfig.json");
 const COLORS = require("./jsonData/colors.json");
 const fs = require("fs");
 const Discord = require("discord.js");
