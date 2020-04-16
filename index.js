@@ -135,18 +135,7 @@ bot.on('guildBanRemove', (guild, user) => {
   });
 })
 
-bot.on('messageDelete', message => {
-  message.guild.channels.cache.find(x => x.name == BOT_CONFIG.channels.logbook || x.id == BOT_CONFIG.channels.logbook).send({
-    embed: new Discord.MessageEmbed()
-      .setTitle("MESSAGE DELETE")
-      .setColor("#2196F3")
-      .addField("Name", message.author.tag)
-      .addField("Tag", `<@${message.author.id}>`)
-      .addField("Id", message.author.id)
-      .addField("Deleted Message", message.content)
-      .setThumbnail(message.author.displayAvatarURL())
-  }).catch(console.error);
-})
+bot.on('messageDelete', require("./extra/messageDelete"))
 
 bot.on('messageUpdate', (oldMessage, newMessage) => {
   if (!newMessage.content) return;
