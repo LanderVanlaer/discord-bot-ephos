@@ -3,3 +3,4 @@ node_modules
 jsonData/*
 *.json
 todo.txt
+!boconfigTemplate.json
