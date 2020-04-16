@@ -1,23 +1,24 @@
 {
-  "name": "discord-bot-ephos",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LanderVanlaer/discord-bot-ephos.git"
-  },
-  "author": "Lander Van laer",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/LanderVanlaer/discord-bot-ephos/issues"
-  },
-  "homepage": "https://github.com/LanderVanlaer/discord-bot-ephos#readme",
-  "dependencies": {
-    "discord.js": "^12.1.1"
-  }
+    "name": "discord-bot-ephos",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/LanderVanlaer/discord-bot-ephos.git"
+    },
+    "author": "Lander Van laer",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/LanderVanlaer/discord-bot-ephos/issues"
+    },
+    "homepage": "https://github.com/LanderVanlaer/discord-bot-ephos#readme",
+    "dependencies": {
+        "discord.js": "^12.1.1"
+    }
 }
