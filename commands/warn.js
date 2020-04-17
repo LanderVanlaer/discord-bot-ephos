@@ -42,14 +42,14 @@ module.exports.run = (bot, message, args) => {
         fs.writeFile("./jsonData/warnings.json", JSON.stringify(warns), err => {
             if (err) console.error(err)
         });
-        warnchannel.send(`<@${wUser.id}> is banned.`);
-        message.reply(`<@${wUser.id}> is banned.`);
+        warnchannel.send(`<@${wUser.id}> is kicked.`);
+        message.reply(`<@${wUser.id}> is kicked.`);
 
-        wUser.send(`Dear <@${wUser.id}>,\nYou're banned from ${message.guild.name}, because you had the maximum number of warns: ${botconfig.maxWarns}`)
+        wUser.send(`Dear <@${wUser.id}>,\nYou're kicked from ${message.guild.name}, because you had the maximum number of warns: ${botconfig.maxWarns}`)
             .then(() => {
-                message.guild.member(wUser).ban({
-                    reason: `you had the maximum number of warns: ${botconfig.maxWarns}; Last Warn Reason: ${reason}`
-                }).catch(console.error);
+                message.guild.member(wUser)
+                    .kick(`you had the maximum number of warns: ${botconfig.maxWarns}; Last Warn Reason: ${reason}`)
+                    .catch(console.error);
             })
             .catch(console.error);
 
