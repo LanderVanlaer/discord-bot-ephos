@@ -1,12 +1,12 @@
 const BOT_CONFIG = require("./jsonData/botconfig.json");
 const COLORS = require("./jsonData/colors.json");
 const fs = require("fs");
-const Discord = require("discord.js");
-const bot = new Discord.Client({
+const { Collection, MessageEmbed, Client } = require("discord.js");
+const bot = new Client({
     disableEveryone: true
 });
-bot.commands = new Discord.Collection();
-bot.reactionsAdd = new Discord.Collection();
+bot.commands = new Collection();
+bot.reactionsAdd = new Collection();
 
 fs.readdir("./commands/", (err, files) => {
     if (err) return console.log(err);
@@ -70,7 +70,7 @@ bot.on("message", message => {
                         timeout: 10000
                     })).catch(console.error);
                     message.guild.channels.cache.find(x => x.name == BOT_CONFIG.channels.logbook || x.id == BOT_CONFIG.channels.logbook)
-                        .send(new Discord.MessageEmbed()
+                        .send(new MessageEmbed()
                             .setTitle("Send Discord Invite")
                             .addField("By", `${message.author} With Id: ${message.author.id}`)
                             .addField("Channel", message.channel)
@@ -116,7 +116,7 @@ bot.on('messageReactionAdd', (reaction, user) => {
 
 bot.on('guildBanAdd', (guild, user) => {
     guild.channels.cache.find(x => x.name == BOT_CONFIG.channels.banKick || x.id == BOT_CONFIG.channels.banKick).send({
-        embed: new Discord.MessageEmbed()
+        embed: new MessageEmbed()
             .setTitle("BAN")
             .setColor("#F04747")
             .addField("Name", user.tag)
@@ -126,7 +126,7 @@ bot.on('guildBanAdd', (guild, user) => {
 })
 bot.on('guildBanRemove', (guild, user) => {
     guild.channels.cache.find(x => x.name == BOT_CONFIG.channels.banKick || x.id == BOT_CONFIG.channels.banKick).send({
-        embed: new Discord.MessageEmbed()
+        embed: new MessageEmbed()
             .setTitle("UNBAN")
             .setColor("#10A33A")
             .addField("Name", user.tag)
@@ -140,7 +140,7 @@ bot.on('messageDelete', require("./extra/messageDelete"))
 bot.on('messageUpdate', (oldMessage, newMessage) => {
     if (!newMessage.content) return;
     newMessage.guild.channels.cache.find(x => x.name == BOT_CONFIG.channels.logbook || x.id == BOT_CONFIG.channels.logbook).send({
-        embed: new Discord.MessageEmbed()
+        embed: new MessageEmbed()
             .setTitle("MESSAGE EDIT")
             .setColor("#2196F3")
             .addField("Name", newMessage.author.tag)
