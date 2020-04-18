@@ -20,7 +20,7 @@ fs.readdir("./commands/", (err, files) => {
     console.log(`\n------COMMANDS------`);
     jsfiles.forEach((f, i) => {
         let props = require(`./commands/${f}`);
-        console.log(`${i}.  ${f}`);
+        console.log(`${i}.\t${f}`);
         bot.commands.set(props.help.name, props);
     });
 })
@@ -38,7 +38,7 @@ fs.readdir("./messageReactionAdd/", (err, files) => {
     console.log(`\n------messageReactionAdd------`);
     jsfile.forEach((f, i) => {
         let props = require(`./messageReactionAdd/${f}`);
-        console.log(`${i}.  ${f}`);
+        console.log(`${i}.\t${f}`);
         bot.reactionsAdd.set(props.help.name, props);
     });
 })
@@ -135,9 +135,21 @@ bot.on('guildBanRemove', (guild, user) => {
     });
 })
 
+bot.on('guildMemberRemove', member => {
+    member.guild.channels.cache.find(x => x.name == BOT_CONFIG.channels.banKick || x.id == BOT_CONFIG.channels.banKick).send({
+        embed: new MessageEmbed()
+            .setTitle("Kick / Leave")
+            .setColor("#F04747")
+            .addField("Name", member.user.tag)
+            .addField("Id", member.user.id)
+            .setThumbnail(member.user.displayAvatarURL())
+    });
+})
+
 bot.on('messageDelete', require("./extra/messageDelete"))
 
 bot.on('messageUpdate', (oldMessage, newMessage) => {
+    if (newMessage.channel.type === "dm") return;
     if (!newMessage.content) return;
     newMessage.guild.channels.cache.find(x => x.name == BOT_CONFIG.channels.logbook || x.id == BOT_CONFIG.channels.logbook).send({
         embed: new MessageEmbed()
