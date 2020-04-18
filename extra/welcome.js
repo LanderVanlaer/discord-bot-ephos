@@ -1,5 +1,5 @@
-const COLORS = require("../jsonData/colors.json");
-const BOT_CONFIG = require("../jsonData/botconfig.json");
+const { DARK_BLUE } = require("../jsonData/colors.json");
+const { website } = require("../jsonData/botconfig.json");
 const fs = require("fs");
 module.exports = member => {
     // var role = member.guild.roles.find('name', BOT_CONFIG.roles.basic);
@@ -9,16 +9,20 @@ module.exports = member => {
         member.send({
             embed: {
                 content: '\u200B',
-                color: COLORS.DARK_BLUE,
+                color: DARK_BLUE,
                 thumbnail: {
                     url: member.guild.iconURL
                 },
                 title: member.guild.name,
-                description: `[Click here to check our site!](${BOT_CONFIG.website})`,
+                description: `[Click here to check our site!](${website})`,
                 fields: [{
                     name: 'About',
                     inline: false,
-                    value: `Welcome on the **${member.guild.name}** server\nThere are now ${member.guild.members.cache.filter(member => !member.user.bot).size} players in total on the server.\nTalk, chat and game!`
+                    value: `
+                        Welcome on the **${member.guild.name}** server
+                        There are now ${member.guild.members.cache.filter(member => !member.user.bot).size} players in total on the server.
+                        Talk, chat and game!
+                    `
                 }, {
                     name: '\u200B',
                     inline: false,
