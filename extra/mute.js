@@ -1,4 +1,4 @@
-const { roles: { muteRole: roleName }, warnMuteTime = 30000 } = require("../jsonData/botconfig.json");
+const { roles: { muteRole: roleName } } = require("../jsonData/botconfig.json");
 const { defaultColor } = require("../jsonData/colors.json");
 
 
@@ -17,7 +17,12 @@ module.exports = member => {
                 member.guild.channels.cache.forEach(async channel => {
                     await channel.overwritePermissions([{
                         id: muterole.id,
-                        deny: ["SEND_MESSAGES", "ADD_REACTIONS"]
+                        deny: [
+                            "SEND_MESSAGES",
+                            "ADD_REACTIONS",
+                            "STREAM",
+                            "SPEAK"
+                        ]
                     }]);
                 });
             } catch (e) { rej(e) }
