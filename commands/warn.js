@@ -7,12 +7,12 @@ let warns = JSON.parse(fs.readFileSync("./jsonData/warnings.json", "utf8"));
 
 module.exports.run = (bot, message, args) => {
     //!warn @daeshan <reason>
-    if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command, if you want to report someone use ${PR}report`);
+    if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command, if you want to report someone use ${PR}${require("./report").help.usage}`);
     let wUser = message.guild.member(message.mentions.users.first() || message.guild.member(args[0]));
-    if (!wUser) return message.reply(`User not found, use: ${PR}warn @name <reason>`);
+    if (!wUser) return message.reply(`User not found, use: ${PR}${module.exports.help.usage}`);
     if (wUser.hasPermission("ADMINISTRATOR")) return message.reply("You can't warn this person, person is an administrator.");
     let reason = args.join(" ").slice(22);
-    if (!reason) return message.reply(`Please add a reason, ${PR}warn @name <reason>`)
+    if (!reason) return message.reply(`Please add a reason, ${PR}${module.exports.help.usage}`)
 
     if (!warns[wUser.id])
         warns[wUser.id] = {
