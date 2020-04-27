@@ -1,6 +1,4 @@
-const
-    Discord = require("discord.js"),
-    { channels: { warn: warnChannelConfig }, maxWarns, prefix: PR, warnMuteTime, roles: { muteRole: roleName } } = require("../jsonData/botconfig.json"),
+const { MessageEmbed } = require("discord.js"), { channels: { warn: warnChannelConfig }, maxWarns, prefix: PR, warnMuteTime, roles: { muteRole: roleName } } = require("../jsonData/botconfig.json"),
     fs = require("fs");
 let warns = JSON.parse(fs.readFileSync("./jsonData/warnings.json", "utf8"));
 
@@ -28,7 +26,7 @@ module.exports.run = (bot, message, args) => {
     const warnchannel = message.guild.channels.cache.find(x => x.name == warnChannelConfig || x.id == warnChannelConfig);
     if (!warnchannel) return message.reply(`Channel "${warnChannelConfig}" not found, ask a mod for help!`);
 
-    warnchannel.send(new Discord.MessageEmbed()
+    warnchannel.send(new MessageEmbed()
         .setAuthor("Warn")
         .setThumbnail(wUser.user.displayAvatarURL())
         .setColor("#fc6400")

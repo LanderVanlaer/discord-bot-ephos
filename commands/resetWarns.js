@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
-const botconfig = require("../jsonData/botconfig.json");
-const pr = botconfig.prefix;
+const { prefix: pr, channels: { warn: warnChannel } } = require("../jsonData/botconfig.json");
 const fs = require("fs");
 let warns = JSON.parse(fs.readFileSync("./jsonData/warnings.json", "utf8"));
 module.exports.run = async (bot, message, args) => {
@@ -21,8 +20,8 @@ module.exports.run = async (bot, message, args) => {
         if (err) console.log(err)
     });
 
-    const warnchannel = message.guild.channels.cache.find(x => x.name == botconfig.channels.warn || x.id == botconfig.channels.warn);
-    if (!warnchannel) return message.reply(`Channel "${botconfig.channels.warn}" not found, ask a mod for help!`);
+    const warnchannel = message.guild.channels.cache.find(x => x.name == warnChannel || x.id == warnChannel);
+    if (!warnchannel) return message.reply(`Channel "${warnChannel}" not found, ask a mod for help!`);
 
     warnchannel.send(
         new Discord.MessageEmbed()

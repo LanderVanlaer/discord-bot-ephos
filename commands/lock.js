@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { channels: { logbook }, roles: { basic: communityRole } } = require("../jsonData/botconfig.json");
+const { channels: { lockUnlock: logbook }, roles: { basic: communityRole } } = require("../jsonData/botconfig.json");
 const { DARK_RED } = require("../jsonData/colors.json");
 
 module.exports.run = async (bot, message, args) => {

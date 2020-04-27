@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { channels: { logbook } } = require("../jsonData/botconfig.json");
+const { channels: { lockUnlock: logbook } } = require("../jsonData/botconfig.json");
 const { GREEN } = require("../jsonData/colors.json");
 const { roles: { basic: communityRole } } = require("../jsonData/botconfig.json");
 

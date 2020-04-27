@@ -1,11 +1,11 @@
 const Discord = require("discord.js");
-const botconfig = require("../jsonData/botconfig.json");
+const { prefix, channels: { reportChannel } } = require("../jsonData/botconfig.json");
 
 module.exports.run = async (bot, message, args) => {
     let rUser = message.guild.member(message.mentions.users.first() || message.guild.member(args[0]));
     if (!rUser) return message.reply("I didn't find that user, !report @name <reason>");
     let reason = args.join(" ").slice(22);
-    if (!reason) return message.reply(`Please give reason, ${botconfig.prefix}${module.exports.help.usage}`);
+    if (!reason) return message.reply(`Please give reason, ${prefix}${module.exports.help.usage}`);
 
     let reportEmbed = new Discord.MessageEmbed()
         .setThumbnail(rUser.user.displayAvatarURL())
@@ -17,8 +17,8 @@ module.exports.run = async (bot, message, args) => {
         .addField("When", message.createdAt)
         .addField("Reason", reason);
 
-    let reportschannel = message.guild.channels.cache.find(x => x.name == botconfig.channels.report || x.id == botconfig.channels.report);
-    if (!reportschannel) return message.channel.send(`I didn't find the report-channel "${botconfig.channels.report}, ask a mod for help"`);
+    let reportschannel = message.guild.channels.cache.find(x => x.name == reportChannel || x.id == reportChannel);
+    if (!reportschannel) return message.channel.send(`I didn't find the report-channel "${reportChannel}, ask a mod for help"`);
 
     message.delete().catch(console.error);
     reportschannel.send(reportEmbed);
