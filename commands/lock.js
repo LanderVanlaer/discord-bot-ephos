@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { channels: { logbook } } = require("../jsonData/botconfig.json");
+const { channels: { logbook }, roles: { basic: communityRole } } = require("../jsonData/botconfig.json");
 const { DARK_RED } = require("../jsonData/colors.json");
 
 module.exports.run = async (bot, message, args) => {
@@ -7,13 +7,10 @@ module.exports.run = async (bot, message, args) => {
     const { channel } = message;
 
     try {
-        await channel.overwritePermissions([{
-            id: message.guild.roles.everyone.id,
-            deny: [
-                "SEND_MESSAGES",
-                "ADD_REACTIONS"
-            ]
-        }]);
+        await channel.updateOverwrite(communityRole, {
+            "SEND_MESSAGES": false,
+            "ADD_REACTIONS": false
+        });
     } catch (error) {
         console.error(error)
     }

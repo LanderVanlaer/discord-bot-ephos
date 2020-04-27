@@ -1,19 +1,17 @@
 const { MessageEmbed } = require("discord.js");
 const { channels: { logbook } } = require("../jsonData/botconfig.json");
 const { GREEN } = require("../jsonData/colors.json");
+const { roles: { basic: communityRole } } = require("../jsonData/botconfig.json");
 
 module.exports.run = async (bot, message, args) => {
     if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command`);
     const { channel } = message;
 
     try {
-        await channel.overwritePermissions([{
-            id: message.guild.roles.everyone.id,
-            allow: [
-                "SEND_MESSAGES",
-                "ADD_REACTIONS"
-            ]
-        }]);
+        await channel.updateOverwrite(communityRole, {
+            "SEND_MESSAGES": true,
+            "ADD_REACTIONS": true
+        });
     } catch (error) {
         console.error(error)
     }
