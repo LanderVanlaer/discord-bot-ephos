@@ -4,7 +4,7 @@ const { prefix } = require("../jsonData/botconfig.json");
 module.exports.run = async (bot, message, args) => {
     const botembed = new MessageEmbed()
         .setTitle("commands")
-        .setDescription("```css\n@userNN = user Not Necessary```")
+        .setDescription("```css\n@userNN : user Not Necessary```")
         // .addField("\u200B", "\u200B")
         .setColor("#15f153")
         .setThumbnail(bot.user.displayAvatarURL());
