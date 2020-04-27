@@ -56,8 +56,8 @@ bot.on("ready", async () => {
 
 
 bot.on("message", message => {
-    if (message.channel.type === "dm") return;
     if (message.author.bot) return;
+    if (message.channel.type === "dm") return require("./extra/directMessages")(message);
 
 
     if (!message.member.hasPermission("ADMINISTRATOR")) {
@@ -94,8 +94,6 @@ bot.on("message", message => {
 bot.on('guildMemberAdd', require("./extra/welcome"));
 
 bot.on('messageReactionAdd', (reaction, user) => {
-    // reaction.message.channel.send(reaction._emoji.name.toString());
-
     if (reaction.message.author.bot) return;
     if (reaction.message.channel.type === "dm") return;
     for (const a in BOT_CONFIG.messageReactionAdd) {
@@ -103,12 +101,6 @@ bot.on('messageReactionAdd', (reaction, user) => {
             return bot.reactionsAdd.get(a).run(bot, reaction, user);
         }
     }
-    return;
-
-    /* 
-      let commandfile = bot.commands.get(cmd.slice(prefix.length));
-      if (commandfile) commandfile.run(bot, reaction);
-    */
 })
 
 
