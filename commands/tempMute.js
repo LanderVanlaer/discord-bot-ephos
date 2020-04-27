@@ -12,7 +12,7 @@ module.exports.run = async (bot, message, args) => {
     duration = Number(duration);
     if (!reason || !duration) return message.reply(`Something went wrong. Use ${PR}${module.exports.help.usage}`);
 
-    const mUser = message.guild.member(message.mentions.users.first() || message.guild.member(mentiondUser));
+    const mUser = message.guild.members.cache.find(x => `<@!${x.id}>` == args[0]);
     if (!mUser) return message.reply(`User not found, use: ${pr}${module.exports.help.usage}`);
     if (mUser.hasPermission("ADMINISTRATOR")) return message.reply("You can't mute this person, person is an administrator.");
 

@@ -5,7 +5,7 @@ let warns = JSON.parse(fs.readFileSync("./jsonData/warnings.json", "utf8"));
 module.exports.run = async (bot, message, args) => {
     //!warn @daeshan <reason>
     if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command.`);
-    const wUser = message.guild.member(message.mentions.users.first() || message.guild.member(args[0]));
+    const wUser = message.guild.members.cache.find(x => `<@!${x.id}>` == args[0]);
     if (!wUser) return message.reply(`User not found, use: ${pr}${module.exports.help.usage}`);
 
     if (!warns[wUser.id]) {

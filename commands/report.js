@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const { prefix, channels: { reportChannel } } = require("../jsonData/botconfig.json");
 
 module.exports.run = async (bot, message, args) => {
-    let rUser = message.guild.member(message.mentions.users.first() || message.guild.member(args[0]));
+    let rUser = message.guild.members.cache.find(x => `<@!${x.id}>` == args[0]);
     if (!rUser) return message.reply("I didn't find that user, !report @name <reason>");
     let reason = args.join(" ").slice(22);
     if (!reason) return message.reply(`Please give reason, ${prefix}${module.exports.help.usage}`);

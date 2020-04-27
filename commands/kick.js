@@ -5,7 +5,7 @@ const { channels: { banKick } } = require("../jsonData/botconfig.json");
 module.exports.run = async (bot, message, args) => {
     if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command, if you want to report someone use ${PR}report`);
 
-    const kUser = message.guild.member(message.mentions.users.first() || message.guild.member(args[0]));
+    const kUser = message.guild.members.cache.find(x => `<@!${x.id}>` == args[0]);
     if (!kUser) return message.reply(`User not found, use: ${PR}${module.exports.help.usage}`);
     if (kUser.hasPermission("ADMINISTRATOR")) return message.reply("You can't kick this person, person is an administrator.");
     const reason = args.join(" ").slice(22);
