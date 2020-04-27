@@ -9,21 +9,19 @@ module.exports = member => {
             try {
                 await member.guild.roles.create({
                     data: {
+                        // position: await member.guild.roles.cache.size, //Missing permissions
                         name: roleName,
                         color: defaultColor
                     }
                 });
                 muterole = member.guild.roles.cache.find(x => x.name == roleName);
                 member.guild.channels.cache.forEach(async channel => {
-                    await channel.overwritePermissions([{
-                        id: muterole.id,
-                        deny: [
-                            "SEND_MESSAGES",
-                            "ADD_REACTIONS",
-                            "STREAM",
-                            "SPEAK"
-                        ]
-                    }]);
+                    await channel.updateOverwrite(muterole.id, {
+                        "SEND_MESSAGES": false,
+                        "ADD_REACTIONS": false,
+                        "STREAM": false,
+                        "SPEAK": false
+                    });
                 });
             } catch (e) { rej(e) }
         }

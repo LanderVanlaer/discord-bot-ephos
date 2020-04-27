@@ -1,6 +1,6 @@
 const
     Discord = require("discord.js"),
-    { channels: { warn: warnChannelConfig }, maxWarns, prefix: PR, warnMuteTime } = require("../jsonData/botconfig.json"),
+    { channels: { warn: warnChannelConfig }, maxWarns, prefix: PR, warnMuteTime, roles: { muteRole: roleName } } = require("../jsonData/botconfig.json"),
     fs = require("fs");
 let warns = JSON.parse(fs.readFileSync("./jsonData/warnings.json", "utf8"));
 
@@ -56,6 +56,7 @@ module.exports.run = (bot, message, args) => {
             .catch(console.error);
 
     } else if (warns[wUser.id].warns > 0) {
+        if (wUser.roles.cache.find(x => x.name == roleName)) return message.reply(`<@${mUser.id}> was already muted.`)
         require("../extra/mute")(wUser)
             .then(muteRole => {
                 message.reply(`Warned that user.\nAnd muted for ${warnMuteTime[warns[wUser.id].warns] || warnMuteTime[warnMuteTime.length - 1]}ms`);

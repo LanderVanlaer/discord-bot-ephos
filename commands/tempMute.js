@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { channels: { mute: logbook }, prefix: PR, } = require("../jsonData/botconfig.json");
+const { channels: { mute: logbook }, prefix: PR, roles: { muteRole: roleName } } = require("../jsonData/botconfig.json");
 const { GREY } = require("../jsonData/colors.json");
 
 
@@ -16,6 +16,7 @@ module.exports.run = async (bot, message, args) => {
     if (!mUser) return message.reply(`User not found, use: ${pr}${module.exports.help.usage}`);
     if (mUser.hasPermission("ADMINISTRATOR")) return message.reply("You can't mute this person, person is an administrator.");
 
+    if (mUser.roles.cache.find(x => x.name == roleName)) return message.reply(`<@${mUser.id}> was already muted.`)
 
     require("../extra/mute")(mUser)
         .then(muteRole => {
@@ -45,7 +46,8 @@ module.exports.run = async (bot, message, args) => {
         })
         .catch(err => {
             message.reply(err);
-            console.log(err);
+            message.reply(`something went wrong`);
+            console.error(err);
         });
 }
 
