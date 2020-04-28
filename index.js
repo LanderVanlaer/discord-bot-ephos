@@ -57,8 +57,9 @@ bot.on("ready", async () => {
 
 bot.on("message", message => {
     if (message.author.bot) return;
-    if (message.channel.type === "dm") return require("./extra/directMessages")(message);
-
+    if (message.channel.type === "dm") return require("./extra/directMessages")(message, bot);
+    if (message.channel.parent.id == BOT_CONFIG.directMessagesChannelCategory ||
+        message.channel.parent.name == BOT_CONFIG.directMessagesChannelCategory) return require("./extra/directMessagesChat")(message, bot);
 
     if (!message.member.hasPermission("ADMINISTRATOR")) {
         const linkRegex = /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li)|discordapp\.com\/invite)\/.+[a-z]/i;
