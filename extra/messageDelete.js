@@ -1,6 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 const BOT_CONFIG = require("../jsonData/botconfig.json");
 module.exports = async message => {
+    if (message.channel.type === "dm") return;
     const
         logs = await message.guild.fetchAuditLogs({ type: 72 }),
         entry = logs.entries.first();
