@@ -1,6 +1,5 @@
 const { MessageEmbed } = require("discord.js"), { channels: { warn: warnChannelConfig }, maxWarns, prefix: PR, warnMuteTime, roles: { muteRole: roleName } } = require("../jsonData/botconfig.json"),
     fs = require("fs");
-let warns = JSON.parse(fs.readFileSync("./jsonData/warnings.json", "utf8"));
 
 
 module.exports.run = (bot, message, args) => {
@@ -12,15 +11,16 @@ module.exports.run = (bot, message, args) => {
     let reason = args.join(" ").slice(22);
     if (!reason) return message.reply(`Please add a reason, ${PR}${module.exports.help.usage}`)
 
+    let warns = JSON.parse(fs.readFileSync("./jsonData/warnings.json", "utf8"));
+
     if (!warns[wUser.id])
         warns[wUser.id] = {
-            warns: 0
+            warns: 0,
+            reasons: []
         };
 
     warns[wUser.id].warns++;
-    fs.writeFile("./jsonData/warnings.json", JSON.stringify(warns), err => {
-        if (err) console.error(err)
-    });
+    warns[wUser.id].reasons.push(reason);
 
 
     const warnchannel = message.guild.channels.cache.find(x => x.name == warnChannelConfig || x.id == warnChannelConfig);
@@ -38,10 +38,11 @@ module.exports.run = (bot, message, args) => {
 
     if (warns[wUser.id].warns >= maxWarns) {
 
-        warns[wUser.id].warns = 0;
-        fs.writeFile("./jsonData/warnings.json", JSON.stringify(warns), err => {
-            if (err) console.error(err)
-        });
+        warns[wUser.id] = {
+            warns: 0,
+            reasons: []
+        }
+
         warnchannel.send(`<@${wUser.id}> is kicked.`);
         message.reply(`<@${wUser.id}> is kicked.`);
 
@@ -54,18 +55,24 @@ module.exports.run = (bot, message, args) => {
             .catch(console.error);
 
     } else if (warns[wUser.id].warns > 0) {
-        if (wUser.roles.cache.find(x => x.name == roleName)) return message.reply(`<@${mUser.id}> was already muted.`)
+        if (wUser.roles.cache.find(x => x.name == roleName)) return message.reply(`<@${wUser.id}> was already muted.`)
         require("../extra/mute")(wUser)
             .then(muteRole => {
                 message.reply(`Warned that user.\nAnd muted for ${warnMuteTime[warns[wUser.id].warns] || warnMuteTime[warnMuteTime.length - 1]}ms`);
                 setTimeout(() => {
                     wUser.roles.remove(muteRole.id)
                         .then(() => { message.reply(`<@${wUser.id}> isn't muted anymore.`) })
-                        .catch(console.error);
+                        .catch(e => {
+                            if (e.code == 10007) return;
+                            else console.error(e)
+                        });
                 }, warnMuteTime[warns[wUser.id].warns] || warnMuteTime[warnMuteTime.length - 1])
             })
             .catch(err => { message.reply(err) })
     }
+    fs.writeFile("./jsonData/warnings.json", JSON.stringify(warns, null, 2), err => {
+        if (err) console.error(err)
+    });
 }
 
 module.exports.help = {
