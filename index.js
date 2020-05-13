@@ -25,26 +25,6 @@ fs.readdir("./commands/", (err, files) => {
     });
 })
 
-fs.readdir("./messageReactionAdd/", (err, files) => {
-    if (err) return console.log(err);
-
-    let jsfile = files.filter(f => f.split(".").pop() === "js");
-
-    if (jsfile.length <= 0) {
-        console.log("Couldn't find messageReactionAdd Files.");
-        return;
-    }
-
-    console.log(`\n------messageReactionAdd------`);
-    jsfile.forEach((f, i) => {
-        let props = require(`./messageReactionAdd/${f}`);
-        console.log(`${i}.\t${f}`);
-        bot.reactionsAdd.set(props.help.name, props);
-    });
-})
-
-
-
 
 //--------------------------------------------------------------------------------------------------------------------------
 bot.on("ready", async () => {
@@ -93,19 +73,6 @@ bot.on("message", message => {
 });
 
 bot.on('guildMemberAdd', require("./extra/welcome"));
-
-bot.on('messageReactionAdd', (reaction, user) => {
-    if (reaction.message.author.bot) return;
-    if (reaction.message.channel.type === "dm") return;
-    for (const a in BOT_CONFIG.messageReactionAdd) {
-        if (BOT_CONFIG.messageReactionAdd[a].messageId == reaction.message.id) {
-            return bot.reactionsAdd.get(a).run(bot, reaction, user);
-        }
-    }
-})
-
-
-
 
 bot.on('guildBanAdd', (guild, user) => {
     guild.channels.cache.find(x => x.name == BOT_CONFIG.channels.banKick || x.id == BOT_CONFIG.channels.banKick).send({
@@ -157,7 +124,7 @@ bot.on('messageUpdate', (oldMessage, newMessage) => {
     }).catch(console.error);
 })
 
-
+/*
 //if message isn't in cachge, 'place it in cache'.
 bot.on('raw', packet => {
     // We don't want this to run on unrelated packets
@@ -183,7 +150,7 @@ bot.on('raw', packet => {
         }
     });
 });
-
+*/
 
 
 bot.login(BOT_CONFIG.token);
