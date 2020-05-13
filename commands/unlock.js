@@ -2,16 +2,23 @@ const { MessageEmbed } = require("discord.js");
 const { channels: { lockUnlock: logbook } } = require("../jsonData/botconfig.json");
 const { GREEN } = require("../jsonData/colors.json");
 const { roles: { basic: communityRole } } = require("../jsonData/botconfig.json");
+const fs = require('fs').promises;
 
 module.exports.run = async (bot, message, args) => {
     if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command`);
     const { channel } = message;
 
+    let file = JSON.parse(await fs.readFile('./jsonData/lockUnlockData.json', 'utf8').catch(console.error));
+    const channelPermissions = file.find(x => x.id == channel.id);
+    if (!channelPermissions) return message.reply("This channel isn't locked!");
+
+    file = file.filter(x => !(x.id == channel.id))
+
+    fs.writeFile('./jsonData/lockUnlockData.json', JSON.stringify(file, null, 2), err => err && console.log(err));
+
+
     try {
-        await channel.updateOverwrite(communityRole, {
-            "SEND_MESSAGES": true,
-            "ADD_REACTIONS": true
-        });
+        await channel.overwritePermissions(channelPermissions.permissions);
     } catch (error) {
         console.error(error)
     }
