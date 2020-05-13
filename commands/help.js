@@ -15,7 +15,8 @@ module.exports.run = async (bot, message, args) => {
                 botembed.addField(`__**${cmd.help.name}**__`, `${cmd.help.description}:\n\`${prefix}${cmd.help.usage}\``);
         } else botembed.addField(`__**${cmd.help.name}**__`, `${cmd.help.description}:\n\`${prefix}${cmd.help.usage}\``);
     });
-    message.channel.send(botembed);
+    await message.author.send(botembed);
+    message.delete().catch(console.error)
 }
 
 module.exports.help = {
