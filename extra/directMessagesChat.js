@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { prefix: pr, directMessagesChannelCategory: dmcc } = require("../jsonData/botconfig.json");
+const { prefix: pr } = require("../jsonData/botconfig.json");
 const stopCommand = "stop";
 const fs = require("fs");
 
@@ -48,14 +48,14 @@ module.exports = async (message, bot) => {
             .setThumbnail(USER.displayAvatarURL())
             .addField("Member", `<@!${USER.id}>`)
             .addField("Closed On", new Date());
-        USER.send(embed);
+        USER.send(embed).catch(() => message.reply('Cannot send to that user.'));
         message.channel.send(embed);
         message.channel.send(`\`\`\`js\n${JSON.stringify(chat, null, 2)}\n\`\`\``);
         message.channel.setName(`✅${message.channel.name}`);
         message.channel.send(`Channel can be deleted`);
     } else { //send chat 
         const files = message.attachments.map(e => e.url)
-        USER.send(message.content, { files });
+        USER.send(message.content, { files }).catch(() => message.reply('Cannot send to that user.'));
     }
     writeFile();
 }
