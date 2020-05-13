@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { prefix, channels: { reportChannel } } = require("../jsonData/botconfig.json");
+const { prefix, channels: { report: reportChannel } } = require("../jsonData/botconfig.json");
 
 module.exports.run = async (bot, message, args) => {
     let rUser = message.guild.members.cache.find(x => `<@!${x.id}>` == args[0]);
