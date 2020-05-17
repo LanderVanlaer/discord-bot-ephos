@@ -69,7 +69,10 @@ bot.on("message", message => {
         cmd = messageArray[0].toLowerCase(),
         args = messageArray.slice(1),
         commandfile = bot.commands.get(cmd.slice(BOT_CONFIG.prefix.length));
-    if (commandfile) commandfile.run(bot, message, args);
+    if (commandfile) {
+        console.log("-->\t", cmd, args, `"${message.author.tag}"`)
+        commandfile.run(bot, message, args);
+    }
 });
 
 bot.on('guildMemberAdd', require("./extra/welcome"));
