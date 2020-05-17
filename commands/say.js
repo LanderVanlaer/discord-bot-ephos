@@ -1,10 +1,13 @@
 const { prefix } = require("../jsonData/botconfig.json");
 
-module.exports.run = (bot, message, args) => {
+module.exports.run = (bot, message, args, isFromTimer) => {
     if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command.`);
     const content = args.join(" ");
     if (!content) return message.reply(`Please add some content to say: ${prefix}${module.exports.help.usage}`);
-    message.delete().catch(console.error);
+
+    if (!isFromTimer)
+        message.delete().catch(console.error);
+
     let possible = true;
     let JSON_CONTENT;
     try {
@@ -13,13 +16,15 @@ module.exports.run = (bot, message, args) => {
         possible = false;
     };
     if (possible) {
-        if (JSON_CONTENT.embed && JSON_CONTENT.embed.title && !content.replace(/ /g, "").includes(`""`)) {
-            try {
-                message.channel.send(JSON_CONTENT);
-            } catch (error) {
-                message.reply("ERROR: Unable to do that.");
+        if (typeof JSON_CONTENT == "object") {
+            if (('embed' in JSON_CONTENT) && ('title' in JSON_CONTENT.embed) && !content.replace(/ /g, "").includes(`""`)) {
+                try {
+                    message.channel.send(JSON_CONTENT);
+                } catch (error) {
+                    message.reply("ERROR: Unable to do that.");
+                }
+                return;
             }
-            return;
         }
     }
     message.channel.send(content);
