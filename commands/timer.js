@@ -1,6 +1,3 @@
-const Discord = require("discord.js");
-const botconfig = require("../jsonData/botconfig.json");
-
 module.exports.run = async (bot, message, args) => {
     if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command.`);
 
@@ -16,6 +13,7 @@ module.exports.run = async (bot, message, args) => {
     const newDate = new Date(Date.UTC(dateNow.getUTCFullYear(), dateNow.getUTCMonth(), dateNow.getUTCDate(), time.hours, time.minutes));
     const timeDifference = newDate - dateNow;
     if (timeDifference <= 0) return message.reply(`Invalid time input`)
+    if (timeDifference > 129600000) return message.reply(`Time too long`) //1.5*24*60*60*1000
     message.delete().catch(console.error);
 
     setTimeout(() => {
