@@ -72,9 +72,12 @@ bot.on("message", message => {
         commandfile = bot.commands.get(cmd.slice(BOT_CONFIG.prefix.length));
     if (commandfile) {
         console.log("-->\t", cmd, args, `"${message.author.tag}"`)
-        if (!hasPermissionOrRole(message.member, BOT_CONFIG.permissions[commandfile.help.name]))
-            return message.reply(`You're not allowed to use that command.`);
-        else
+        if (commandfile.help.administrator) {
+            if (!hasPermissionOrRole(message.member, BOT_CONFIG.permissions[commandfile.help.name]))
+                return message.reply(`You're not allowed to use that command.`);
+            else
+                commandfile.run(bot, message, args);
+        } else
             commandfile.run(bot, message, args);
     }
 });
