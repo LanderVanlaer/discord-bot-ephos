@@ -1,8 +1,10 @@
 {
-    "token": "/*TOKEN OFF BOT*/",
-    "prefix": "!",
+    "token": "",
+    "prefix": ".e",
     "roles": {
-        "basic": "534005653807824916"
+        "basic": "534005653807824916",
+        "muteRole": "mute",
+        "lockUnlockAllowedToChat": ["534039474829524994", "564648452138786253"]
     },
     "website": "https://google.com",
     "activityType": "LISTENING",
@@ -12,15 +14,46 @@
         "report": "reports",
         "warn": "warnings",
         "banKick": "ban-kick",
-        "logbook": "logboek"
+        "logbook": "logboek",
+        "mute": "warnings",
+        "lockUnlock": "logboek"
+    },
+    "permissions": {
+        "kick": {
+            "type": "PERMISSION",
+            "data": "ADMINISTRATOR"
+        },
+        "lock": {
+            "type": "ROLE",
+            "data": "ADMIN"
+        },
+        "unlock": {
+            "type": "ROLE",
+            "data": "ADMIN"
+        },
+        "warn": {
+            "type": "PERMISSION",
+            "data": "ADMINISTRATOR"
+        },
+        "timer": {
+            "type": "PERMISSION",
+            "data": "ADMINISTRATOR"
+        },
+        "tempmute": {
+            "type": "ROLE",
+            "data": "ADMIN"
+        },
+        "say": {
+            "type": "PERMISSION",
+            "data": "ADMINISTRATOR"
+        },
+        "resetwarn": {
+            "type": "PERMISSION",
+            "data": "ADMINISTRATOR"
+        }
     },
     "warnMuteTime": ["10000"],
     "maxWarns": 5,
-    "messageReactionAdd": {
-        "rulesVerification": {
-            "messageId": "660162755562700830",
-            "role": "basic"
-        }
-    },
+    "directMessagesChannelCategory": "704613591432560690",
     "notAllowedWords": [""]
 }
