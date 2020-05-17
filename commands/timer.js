@@ -1,6 +1,4 @@
 module.exports.run = async (bot, message, args) => {
-    if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command.`);
-
     if (args.length < 2) return message.reply(`Invalid time input`)
     const timeText = args.shift().split(':');
     const time = {
@@ -25,6 +23,6 @@ module.exports.help = {
     name: "timer",
     description: "set a timer for the bot to say",
     administrator: true,
-    usage: "timer <when (24h) (UTC)> <content>"
+    usage: "timer <when '16:55' (UTC)> <content>"
 }
 // !timer 16:30 {daarla:"azeaze"}

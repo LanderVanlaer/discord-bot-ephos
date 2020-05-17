@@ -1,6 +1,7 @@
 const BOT_CONFIG = require("./jsonData/botconfig.json");
 const COLORS = require("./jsonData/colors.json");
 const fs = require("fs");
+const hasPermissionOrRole = require('./extra/hasPermissionOrRole');
 const { Collection, MessageEmbed, Client } = require("discord.js");
 const bot = new Client({
     disableEveryone: true
@@ -71,7 +72,10 @@ bot.on("message", message => {
         commandfile = bot.commands.get(cmd.slice(BOT_CONFIG.prefix.length));
     if (commandfile) {
         console.log("-->\t", cmd, args, `"${message.author.tag}"`)
-        commandfile.run(bot, message, args);
+        if (!hasPermissionOrRole(message.member, BOT_CONFIG.permissions[commandfile.help.name]))
+            return message.reply(`You're not allowed to use that command.`);
+        else
+            commandfile.run(bot, message, args);
     }
 });
 

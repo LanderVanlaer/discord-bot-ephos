@@ -1,7 +1,6 @@
 const { prefix } = require("../jsonData/botconfig.json");
 
 module.exports.run = (bot, message, args, isFromTimer) => {
-    if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command.`);
     const content = args.join(" ");
     if (!content) return message.reply(`Please add some content to say: ${prefix}${module.exports.help.usage}`);
 

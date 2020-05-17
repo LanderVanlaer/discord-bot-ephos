@@ -1,19 +1,23 @@
 const { MessageEmbed } = require("discord.js");
-const { prefix } = require("../jsonData/botconfig.json");
+const { prefix, permissions } = require("../jsonData/botconfig.json");
+const hasPermission = require('../extra/hasPermissionOrRole');
 
 module.exports.run = async (bot, message, args) => {
     const botembed = new MessageEmbed()
         .setTitle("commands")
         .setDescription("```css\n@userNN : user Not Necessary```")
-        // .addField("\u200B", "\u200B")
         .setColor("#15f153")
         .setThumbnail(bot.user.displayAvatarURL());
-    const MEMBER_HAS_ADMINISTRATOR = message.member.hasPermission("ADMINISTRATOR");
-    bot.commands.forEach(cmd => { //run, name, description, administrator
-        if (cmd.help.administrator) {
-            if (MEMBER_HAS_ADMINISTRATOR)
-                botembed.addField(`__**${cmd.help.name}**__`, `${cmd.help.description}:\n\`${prefix}${cmd.help.usage}\``);
-        } else botembed.addField(`__**${cmd.help.name}**__`, `${cmd.help.description}:\n\`${prefix}${cmd.help.usage}\``);
+
+    const addToBotembed = ({ administrator, name, description, usage }) => {
+        botembed.addField(`__**${name}**__`, `${description}:\n\`${prefix}${usage}\``);
+    }
+
+    bot.commands.forEach(({ help }) => { //run, name, description, administrator
+        if (help.administrator) {
+            if (hasPermission(message.member, permissions[help.name]))
+                addToBotembed(help);
+        } else addToBotembed(help);
     });
     await message.author.send(botembed);
     message.delete().catch(console.error)

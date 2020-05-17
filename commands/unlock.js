@@ -5,7 +5,6 @@ const { roles: { basic: communityRole } } = require("../jsonData/botconfig.json"
 const fs = require('fs').promises;
 
 module.exports.run = async (bot, message, args) => {
-    if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command`);
     const { channel } = message;
 
     let file = JSON.parse(await fs.readFile('./jsonData/lockUnlockData.json', 'utf8').catch(console.error));

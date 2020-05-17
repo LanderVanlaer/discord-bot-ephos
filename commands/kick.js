@@ -1,13 +1,12 @@
 const { MessageEmbed } = require("discord.js");
 const { prefix: PR } = require("../jsonData/botconfig.json");
-const { channels: { banKick } } = require("../jsonData/botconfig.json");
+const { channels: { banKick }, permissions: { kick: kickPermissions } } = require("../jsonData/botconfig.json");
 
 module.exports.run = async (bot, message, args) => {
-    if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command, if you want to report someone use ${PR}report`);
-
     const kUser = message.guild.members.cache.find(x => `<@!${x.id}>` == args[0]);
     if (!kUser) return message.reply(`User not found, use: ${PR}${module.exports.help.usage}`);
-    if (kUser.hasPermission("ADMINISTRATOR")) return message.reply("You can't kick this person, person is an administrator.");
+    if (require('../extra/hasPermissionOrRole')(kUser, kickPermissions))
+        return message.reply(`You can't kick this person, person is an admin.`)
     const reason = args.join(" ").slice(22);
     if (!reason) return message.reply(`Please add a reason, ${PR}${module.exports.help.usage}`)
 

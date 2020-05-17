@@ -4,7 +4,6 @@ const { DARK_RED } = require("../jsonData/colors.json");
 const fs = require('fs').promises;
 
 module.exports.run = async (bot, message, args) => {
-    if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command`);
     const { channel, channel: { permissionOverwrites } } = message;
 
 

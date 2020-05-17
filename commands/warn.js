@@ -1,13 +1,16 @@
-const { MessageEmbed } = require("discord.js"), { channels: { warn: warnChannelConfig }, maxWarns, prefix: PR, warnMuteTime, roles: { muteRole: roleName } } = require("../jsonData/botconfig.json"),
+const { MessageEmbed } = require("discord.js"), { channels: { warn: warnChannelConfig }, maxWarns, prefix: PR, warnMuteTime, roles: { muteRole: roleName }, permissions: { warn: warnPermissions } } = require("../jsonData/botconfig.json"),
     fs = require("fs");
 
 
 module.exports.run = (bot, message, args) => {
-    //!warn @daeshan <reason>
-    if (!message.member.hasPermission("ADMINISTRATOR")) return message.reply(`You're not allowed to use that command, if you want to report someone use ${PR}${require("./report").help.usage}`);
+    // message.reply(`You're not allowed to use that command, if you want to report someone use ${PR}${require("./report").help.usage}`)
+
     let wUser = message.guild.members.cache.find(x => `<@!${x.id}>` == args[0]);
     if (!wUser) return message.reply(`User not found, use: ${PR}${module.exports.help.usage}`);
-    if (wUser.hasPermission("ADMINISTRATOR")) return message.reply("You can't warn this person, person is an administrator.");
+
+    if (require('../extra/hasPermissionOrRole')(wUser, warnPermissions))
+        return message.reply(`You can't warn this person, person is an administrator.`)
+
     let reason = args.join(" ").slice(22);
     if (!reason) return message.reply(`Please add a reason, ${PR}${module.exports.help.usage}`)
 
